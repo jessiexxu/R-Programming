@@ -1,8 +1,6 @@
 Getting and Cleaning Data in R
 ==============
 
--- Getting and Cleaning Data Course Project on Coursera
-
 This file describes how the script works.
 
 Script:
