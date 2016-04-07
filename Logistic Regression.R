@@ -13,12 +13,9 @@ install.packages('ROCR')
 library(ROCR)
 
 # Read data
-getwd()
-setwd("C:/Users/xxu/Desktop/R")
-
 training.data.raw = read.csv('train.csv', header=T, na.strings = c(""))
-sapply(training.data.raw, function(x) sum(is.na(x)))
-sapply(training.data.raw, function(x) length(unique(x)))
+sapply(training.data.raw, function(x) sum(is.na(x))) # count how many missing values there are for each variable
+sapply(training.data.raw, function(x) length(unique(x))) # count how many missing values there are for each variable
 
 # Check missing values
 missmap(training.data.raw, main = "Missing values vs observed")
