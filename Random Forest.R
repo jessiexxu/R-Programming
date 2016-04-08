@@ -27,3 +27,20 @@ model = randomForest(taste ~ . - quality, data = train, importance = TRUE)
 model
 pred = predict(model, newdata = test)
 table(pred, test$taste)
+misClassificationError = mean(pred != test$taste)
+paste('Accuracy', 1-misClassificationError)
+
+# Create feature importance chart
+imp = importance(model, type = 1)
+featureImportance = data.frame(feature = row.names(imp), importance = imp[,1])
+
+plot = ggplot(featureImportance, aes(x = reorder(feature, importance), y = importance)) +
+  geom_bar(stat = "identity", fill = "#53cfff") +
+  coord_flip() +
+  theme_light(base_size = 15) +
+  xlab("") +
+  ylab("Importance") +
+  ggtitle("Random Forest Feature Imporance\n") +
+  theme(plot.title = element_text(size = 18))
+  
+plot
