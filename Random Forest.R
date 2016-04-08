@@ -1,21 +1,29 @@
-# Use the same Titanic data
+# Use the wine quality data
 install.packages('randomForest')
 library(randomForest)
 library(ggplot2)
 
+url = 'https://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-white.csv'
+wine = read.csv(url, sep = ';', header = TRUE)
+head(wine)
 
-rf = randomForest(train[,c(2:8)], train$Survived, ntree = 100, importance = TRUE)
+# Assign segment membership
+barplot(table(wine$quality))
 
-imp = importance(rf, type = 1)
-featureImportance = data.frame(Feature = row.names(imp), importance = imp[,1])
+wine$taste = ifelse(wine$quality < 6, 'bad', 'good')
+wine$taste[wine$quality == 6] = 'normal'
+is.factor(wine$taste)
+wine$taste = as.factor(wine$taste)
+table(wine$taste)
 
-plot = ggplot(featureImportance, aes(x=reorder(Feature, imp), y=imp)) +
-  geom_bar(stat="identity", fill="#53cfff") +
-  coord_flip() + 
-  theme_light(base_size=20) +
-  xlab("") +
-  ylab("Importance") + 
-  ggtitle("Random Forest Feature Importance\n") +
-  theme(plot.title=element_text(size=18))
+# Split data into train vs. test datasets
+set.seed(123)
+sample_size = sample(nrow(wine), 0.8 * nrow(wine))
+train = wine[sample_size,]
+test = wine[-sample_size,]
 
-plot
+# Build random forest model
+model = randomForest(taste ~ . - quality, data = train, importance = TRUE)
+model
+pred = predict(model, newdata = test)
+table(pred, test$taste)
