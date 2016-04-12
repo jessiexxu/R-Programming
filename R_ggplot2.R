@@ -1,3 +1,5 @@
+library(ggplot2)
+
 # Scatter plots ordered and colored by correlation
 rev_plot = ggplot(data = data_plot, aes(data_plot$`Revenue (Billions)`,reorder(data_plot$`Company Name`,data_plot$`Revenue (Billions)`))) + 
   geom_point(size = 3, colour = "#0072B2") +  xlab("Revenue ($ Billions)") + ylab("Company Name")
